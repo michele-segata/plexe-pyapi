@@ -1,0 +1,360 @@
+from os import environ, listdir
+from os.path import join, splitext, dirname
+import pkgutil
+import imp
+import sys
+if 'SUMO_HOME' in environ:
+    tools = join(environ['SUMO_HOME'], 'tools')
+    sys.path.append(tools)
+else:
+    sys.exit("please declare environment variable 'SUMO_HOME'")
+import traci
+from traci import constants as tc
+
+# available controllers
+DRIVER = 0
+ACC = 1
+CACC = 2
+FAKED_CACC = 3
+PLOEG = 4
+CONSENSUS = 5
+
+U = "u"
+ACCELERATION = "acceleration"
+SPEED = "speed"
+POS_X = "posx"
+POS_Y = "posy"
+TIME = "time"
+INDEX = "index"
+LENGTH = "length"
+GEAR = "gear"
+RPM = "rpm"
+
+
+class Plexe(traci.StepListener):
+    def __init__(self):
+        """
+        Constructor. Instantiates methods' implementation depending on SUMO
+        version. SUMO must be already started when instantiating the class
+        """
+        self.plexe = None
+        api, version = traci.getVersion()
+        files = listdir(join(dirname(__file__), "plexe_imp"))
+        plexe_f, plexe_fn, plexe_d = imp.find_module("plexe_imp",
+                                                     [dirname(__file__)])
+        plexe_imp = imp.load_module("plexe_imp", plexe_f, plexe_fn,
+                                    plexe_d)
+        for f in files:
+            name, ext = splitext(f)
+            if ext == ".py":
+                mod_f, mod_fn, mod_d = imp.find_module(name, plexe_imp.__path__)
+                try:
+                    mod = imp.load_module("plexe.plexe_imp." + name, mod_f,
+                                          mod_fn, mod_d)
+                except ImportError:
+                    continue
+                try:
+                    instance = mod.PlexeImp()
+                except AttributeError:
+                    continue
+                versions = instance.register()
+                for v in versions:
+                    if version.startswith(v):
+                        self.plexe = instance
+                        break
+        if self.plexe is None:
+            print("No Plexe API implementation found for %s" % version)
+            raise Exception()
+
+    def step(self, step):
+        self.plexe.step(step)
+
+    def set_cc_desired_speed(self, vid, speed):
+        """
+        Sets the cruise control desired speed
+        :param vid: vehicle id
+        :param speed: speed in m/s
+        """
+        self.plexe.set_cc_desired_speed(vid, speed)
+
+    def set_active_controller(self, vid, controller):
+        """
+        Sets the currently active controller
+        :param vid: vehicle id
+        :param controller: DRIVER = 0, ACC = 1, CACC = 2, FAKED_CACC = 3,
+        PLOEG = 4, CONSENSUS = 5
+        """
+        self.plexe.set_active_controller(vid, controller)
+
+    def set_fixed_lane(self, vid, lane, safe=True):
+        """
+        Tell a vehicle to move and stay on a specific lane
+        :param vid: vehicle id
+        :param lane: lane index (0-based)
+        :param safe: if true, respect safety distance, if false change lane
+        as soon as possible
+        """
+        self.plexe.set_fixed_lane(vid, lane, safe)
+
+    def set_fixed_acceleration(self, vid, activate, acceleration):
+        """
+        Tell a vehicle to apply a certain acceleration, or to switch back to
+        standard behavior
+        :param vid: vehicle id
+        :param activate: if true, sets a constant acceleration profile to the
+        vehicle, if false, gives the control back to the control algorithms
+        :param acceleration: constant acceleration to apply
+        """
+        self.plexe.set_fixed_acceleration(vid, activate, acceleration)
+
+    def get_vehicle_data(self, vid):
+        """
+        Returns vehicle dynamics data of an automated vehicle
+        :param vid: vehicle id
+        :return: a dictionary including the plexe.U, plexe.ACCELERATION,
+        plexe.SPEED, plexe.POS_X, plexe.POS_Y, plexe.TIME keys
+        """
+        return self.plexe.get_vehicle_data(vid)
+
+    def get_crashed(self, vid):
+        """
+        Returns whether an automated vehicle crashed or not
+        :param vid: vehicle id
+        :return: True if crashed, False otherwise
+        """
+        return self.plexe.get_crashed(vid)
+
+    def get_radar_data(self, vid):
+        """
+        Returns data measured by radar, i.e., distance and relative speed to
+        the front vehicle. If there is no front vehicle or it is too far (
+        more than 250 meters) then the returned distance is set to -1
+        :param vid: vehicle id
+        :return: a dictionary including plexe.GEAR and plexe.RPM keys
+        """
+        return self.plexe.get_radar_data(vid)
+
+    def get_lanes_count(self, vid):
+        """
+        Returns the number of lanes of the road the vehicle is currently
+        traveling on
+        :param vid: vehicle id
+        :return: the number of lanes of the current road
+        """
+        return self.plexe.get_lanes_count(vid)
+
+    def get_distance_to_end(self, vid):
+        """
+        Returns the distance to the end of the route
+        :param vid: vehicle id
+        :return: the distance to route end in meters
+        """
+        return self.plexe.get_distance_to_end(vid)
+
+    def get_distance_from_begin(self, vid):
+        """
+        Returns the distance from the beginning of the route
+        :param vid: vehicle id
+        :return: the distance from route beginning in meters
+        """
+        return self.plexe.get_distance_from_begin(vid)
+
+    def get_active_controller(self, vid):
+        """
+        Returns the active car controller
+        :param vid: vehicle id
+        :return: active controller, DRIVER = 0, ACC = 1, CACC = 2,
+        FAKED_CACC = 3, PLOEG = 4, CONSENSUS = 5
+        """
+        return self.plexe.get_active_controller(vid)
+
+    def get_acc_acceleration(self, vid):
+        """
+        Returns the acceleration computed by the ACC, which is computed even
+        when the ACC is not currently controlling the car
+        :param vid: vehicle id
+        :return: computed ACC acceleration in m/s^2
+        """
+        return self.plexe.get_acc_acceleration(vid)
+
+    def get_cacc_spacing(self, vid):
+        """
+        Returns the fixed spacing for the PATH CACC controller
+        :param vid: vehicle id
+        :return: spacing in meters
+        """
+        return self.plexe.get_cacc_spacing(vid)
+
+    def get_stored_vehicle_data(self, vid, other_vid):
+        """
+        Returns the data stored by this vehicle about another vehicle
+        :param vid: vehicle id
+        :param other_vid: index of the vehicle in the same platoon, NOT the
+        sumo vehicle id
+        :return: a dictionary including the plexe.ACCELERATION, plexe.SPEED,
+        plexe.POS_X, plexe.POS_Y, plexe.TIME, plexe.INDEX, and plexe.LENGTH
+        keys. If the given index is greater or equal than the platoon size,
+        then the plexe.INDEX entry in the dictionary will be set to -1
+        """
+        return self.plexe.get_stored_vehicle_data(vid, other_vid)
+
+    def get_engine_data(self, vid):
+        """
+        If the vehicle is using the realistic engine model, this method
+        returns the current gear and the engine RPM
+        :param vid: vehicle id
+        :return: a dictionary including the plexe.GEAR and plexe.RPM keys. If
+        the vehicle is not using the realistic engine model, the gear is set
+        to -1
+        """
+        return self.plexe.get_engine_data(vid)
+
+    def set_vehicle_data(self, vid, index, acceleration, speed, pos_x, pos_y,
+                         time, length):
+        """
+        Sets information about a vehicle in the platoon. This is currently
+        only used by the CONSENSUS controller. See also
+        set_leader_vehicle_data and set_front_vehicle_data.
+        :param vid: vehicle id, i.e., the vehicle that will store the
+        information
+        :param index: index of the platoon member the data belongs to
+        :param acceleration: acceleration in m/s^2
+        :param speed: speed in m/s
+        :param pos_x: x position in m
+        :param pos_y: y position in m
+        :param time: time at which the information has been generated
+        :param length: length of the vehicle
+        """
+        return self.plexe.set_vehicle_data(vid, index, acceleration, speed,
+                                           pos_x, pos_y, time, length)
+
+    def set_leader_vehicle_data(self, vid, acceleration, speed, pos_x, pos_y,
+                                time):
+        """
+        Sets data about the platoon leader
+        :param vid: vehicle which stores the information
+        :param acceleration: acceleration of the leader in m/s^2
+        :param speed: speed of the leader in m/s
+        :param pos_x: x position of the leader in m
+        :param pos_y: y position of the leader in m
+        :param time: time at which the leader generated the data
+        """
+        return self.plexe.set_leader_vehicle_data(vid, acceleration, speed,
+                                                  pos_x, pos_y, time)
+
+    def set_front_vehicle_data(self, vid, acceleration, speed, pos_x, pos_y,
+                               time):
+        """
+        Sets data about the front vehicle
+        :param vid: vehicle which stores the information
+        :param acceleration: acceleration of the front vehicle in m/s^2
+        :param speed: speed of the front vehicle in m/s
+        :param pos_x: x position of the front vehicle in m
+        :param pos_y: y position of the front vehicle in m
+        :param time: time at which the front vehicle generated the data
+        """
+        return self.plexe.set_front_vehicle_data(vid, acceleration, speed,
+                                                 pos_x, pos_y, time)
+
+    def set_vehicle_position(self, vid, position):
+        """
+        Sets the position of the vehicle within its platoon
+        :param vid: vehicle id
+        :param position: 0-based position index
+        """
+        return self.plexe.set_vehicle_position(vid, position)
+
+    def set_platoon_size(self, vid, size):
+        """
+        Sets the number of vehicles for the platoon a vehicle belongs to
+        :param vid: vehicle id
+        :param size: number of vehicles
+        """
+        return self.plexe.set_platoon_size(vid, size)
+
+    def set_path_cacc_parameters(self, vid, distance=None, xi=None,
+                                 omega_n=None, c1=None):
+        """
+        Sets the parameters for the PATH CACC. If a parameter is set to None,
+        it won't be set and it will keep its current value
+        :param vid: vehicle id
+        :param distance: constant spacing in meters
+        :param xi: damping ratio
+        :param omega_n: bandwidth
+        :param c1: leader data weighting parameter
+        """
+        return self.plexe.set_path_cacc_parameters(vid, distance, xi,
+                                                   omega_n, c1)
+
+    def set_ploeg_cacc_parameters(self, vid, k_p=None, k_d=None, headway=None):
+        """
+        Sets the parameters for the PLOEG's CACC. If a parameter is set to
+        None, it won't be set and it will keep its current value
+        :param vid: vehicle id
+        :param k_p: proportional gain
+        :param k_d: derivative gain
+        :param headway: time headway in seconds
+        """
+        return self.plexe.set_ploeg_cacc_parameters(vid, k_p, k_d, headway)
+
+    def set_engine_tau(self, vid, tau):
+        """
+        Sets the engine time constant for the first order lag engine model
+        :param vid: vehicle id
+        :param tau: time constant in seconds
+        """
+        return self.plexe.set_engine_tau(vid, tau)
+
+    def set_engine_model(self, vid, model):
+        """
+        Sets the engine model for the given vehicle
+        :param vid: vehicle id
+        :param model: engine model id
+        """
+        return self.plexe.set_engine_model(vid, model)
+
+    def set_vehicle_model(self, vid, model):
+        """
+        Sets the vehicle model when choosing the realistic engine model.
+        Basically, this method chooses the real vehicle characteristics
+        :param vid: vehicle id
+        :param model: model id as defined in the vehicles.xml file
+        """
+        return self.plexe.set_vehicle_model(vid, model)
+
+    def set_vehicles_file(self, vid, filename):
+        """
+        Sets the xml file from which the realistic engine model should load
+        vehicles characteristics
+        :param vid: vehicle id
+        :param filename: xml file
+        """
+        return self.plexe.set_vehicles_file(vid, filename)
+
+    def set_leader_vehicle_fake_data(self, vid, acceleration, speed):
+        """
+        Sets the leader vehicle data for the FAKED CACC controller
+        :param vid: vehicle id
+        :param acceleration: leader acceleration in m/s^2
+        :param speed: leader speed in m/s
+        """
+        return self.plexe.set_leader_vehicle_fake_data(vid, acceleration, speed)
+
+    def set_front_vehicle_fake_data(self, vid, acceleration, speed, distance):
+        """
+        Sets the front vehicle data for the FAKED CACC controller
+        :param vid: vehicle id
+        :param acceleration: front vehicle acceleration in m/s^2
+        :param speed: front vehicle speed in m/s
+        :param distance: distance to front vehicle in m
+        """
+        return self.plexe.set_front_vehicle_fake_data(vid, acceleration,
+                                                      speed, distance)
+
+    def set_acc_headway_time(self, vid, headway):
+        """
+        Sets the headway time for the ACC
+        :param vid: vehicle id
+        :param headway: headway in seconds
+        """
+        return self.plexe.set_acc_headway_time(vid, headway)
