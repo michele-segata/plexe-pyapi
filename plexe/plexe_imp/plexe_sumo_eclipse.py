@@ -63,14 +63,21 @@ class PlexeImp(plexe.Plexe):
         ret = PlexeImp._get_par(vid, par, *args)
         return ret[0]
 
-    def _change_lane(self, vid, current, direction, safe=True):
+    @staticmethod
+    def _set_lane_change_mode(vid, safe):
         if safe:
             traci.vehicle.setLaneChangeMode(vid, FIX_LC)
+        else:
+            traci.vehicle.setLaneChangeMode(vid, FIX_LC_AGGRESSIVE)
+
+    def _change_lane(self, vid, current, direction, safe=True):
+        if safe:
+            self._set_lane_change_mode(vid, safe)
             traci.vehicle.changeLane(vid, current + direction, 0)
         else:
             state, state2 = traci.vehicle.getLaneChangeState(vid, direction)
             if state & tc.LCA_OVERLAPPING == 0:
-                traci.vehicle.setLaneChangeMode(vid, FIX_LC_AGGRESSIVE)
+                self._set_lane_change_mode(vid, safe)
                 traci.vehicle.changeLane(vid, current + direction, 0)
                 lane, safe, wait = self.lane_changes[vid]
                 self.lane_changes[vid] = (lane, safe, True)
@@ -92,6 +99,7 @@ class PlexeImp(plexe.Plexe):
                 direction = 0
             if direction == 0:
                 satisfied.append(vid)
+                self._set_lane_change_mode(vid, safe)
             else:
                 self._change_lane(vid, current, direction, safe)
         for vid in satisfied:
