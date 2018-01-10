@@ -16,7 +16,6 @@
 #
 from os import environ, listdir
 from os.path import join, splitext, dirname
-import pkgutil
 import imp
 import sys
 if 'SUMO_HOME' in environ:
@@ -25,7 +24,6 @@ if 'SUMO_HOME' in environ:
 else:
     sys.exit("please declare environment variable 'SUMO_HOME'")
 import traci
-from traci import constants as tc
 
 # available controllers
 DRIVER = 0
