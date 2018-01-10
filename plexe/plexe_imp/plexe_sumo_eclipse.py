@@ -64,20 +64,23 @@ class PlexeImp(plexe.Plexe):
         return ret[0]
 
     @staticmethod
-    def _set_lane_change_mode(vid, safe):
-        if safe:
-            traci.vehicle.setLaneChangeMode(vid, FIX_LC)
+    def _set_lane_change_mode(vid, safe, fixed):
+        if not fixed:
+            traci.vehicle.setLaneChangeMode(vid, DEFAULT_LC)
         else:
-            traci.vehicle.setLaneChangeMode(vid, FIX_LC_AGGRESSIVE)
+            if safe:
+                traci.vehicle.setLaneChangeMode(vid, FIX_LC)
+            else:
+                traci.vehicle.setLaneChangeMode(vid, FIX_LC_AGGRESSIVE)
 
     def _change_lane(self, vid, current, direction, safe=True):
         if safe:
-            self._set_lane_change_mode(vid, safe)
+            self._set_lane_change_mode(vid, safe, True)
             traci.vehicle.changeLane(vid, current + direction, 0)
         else:
             state, state2 = traci.vehicle.getLaneChangeState(vid, direction)
             if state & tc.LCA_OVERLAPPING == 0:
-                self._set_lane_change_mode(vid, safe)
+                self._set_lane_change_mode(vid, safe, True)
                 traci.vehicle.changeLane(vid, current + direction, 0)
                 lane, safe, wait = self.lane_changes[vid]
                 self.lane_changes[vid] = (lane, safe, True)
@@ -99,7 +102,7 @@ class PlexeImp(plexe.Plexe):
                 direction = 0
             if direction == 0:
                 satisfied.append(vid)
-                self._set_lane_change_mode(vid, safe)
+                self._set_lane_change_mode(vid, safe, True)
             else:
                 self._change_lane(vid, current, direction, safe)
         for vid in satisfied:
@@ -113,6 +116,9 @@ class PlexeImp(plexe.Plexe):
 
     def set_fixed_lane(self, vid, lane, safe=True):
         self.lane_changes[vid] = (lane, safe, False)
+
+    def disable_fixed_lane(self, vid):
+        self._set_lane_change_mode(vid, False, False)
 
     def set_fixed_acceleration(self, vid, activate, acceleration):
         self._set_par(vid, cc.PAR_FIXED_ACCELERATION,

@@ -96,6 +96,14 @@ class Plexe(traci.StepListener):
         """
         self.plexe.set_fixed_lane(vid, lane, safe)
 
+    def disable_fixed_lane(self, vid):
+        """
+        Disables the fixed lane set with set_fixed_lane and gives lane change
+        decisions back to the lane change model
+        :param vid: vehicle id
+        """
+        self.plexe.disable_fixed_lane(vid)
+
     def set_fixed_acceleration(self, vid, activate, acceleration):
         """
         Tell a vehicle to apply a certain acceleration, or to switch back to
