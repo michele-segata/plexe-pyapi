@@ -44,6 +44,9 @@ LENGTH = "length"
 GEAR = "gear"
 RPM = "rpm"
 
+ENGINE_MODEL_FOLM = 0x00
+ENGINE_MODEL_REALISTIC = 0x01
+
 
 class Plexe(traci.StepListener):
     def __init__(self):
@@ -331,7 +334,8 @@ class Plexe(traci.StepListener):
         """
         Sets the engine model for the given vehicle
         :param vid: vehicle id
-        :param model: engine model id
+        :param model: engine model id. Possible values are ENGINE_MODEL_FOLM
+        and ENGINE_MODEL_REALISTIC
         """
         return self.plexe.set_engine_model(vid, model)
 
