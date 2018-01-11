@@ -1,0 +1,80 @@
+<vehicles>
+	<vehicle id="alfa-147" description="Alfa Romeo 147 1.6 Twin Spark">
+		<!-- Gearbox ratios -->
+		<gears>
+			<gear n="1" ratio="3.909"/>
+			<gear n="2" ratio="2.238"/>
+			<gear n="3" ratio="1.520"/>
+			<gear n="4" ratio="1.156"/>
+			<gear n="5" ratio="0.971"/>
+			<differential ratio="3.714"/>
+		</gears>
+		<!-- Mass in kilograms and mass factor considering engine rotational inertia -->
+		<mass mass="1300" massFactor="1.089"/>
+		<!-- Tracting wheels diameter in meters, friction coefficient, and parameters for rolling resistance -->
+		<wheels diameter="0.62" friction="0.7" cr1="0.0136" cr2="5.18e-7"/>
+		<!-- Air friction coefficients. Drag coefficient and maximum section in squared meters -->
+		<drag cAir="0.32" section="2.1"/>
+		<!-- Engine characteristics including power mapping parameters -->
+		<engine efficiency="0.9" cylinders="4" type="poly" maxRpm="6750" minRpm="1500" tauEx="0.1">
+			<power x0="-40.2222208291346" x1="0.065292636898335" x2="-2.15942570332509e-05" x3="4.36009415355034e-09" x4="-3.13060657304086e-13"/>
+		</engine>
+		<!-- Gear shifting rules -->
+		<shifting rpm="6500" deltaRpm="200"/>
+		<!-- Brakes data. Tau is the actuation time in seconds. Other parameters such as friction are taken from the wheels section -->
+		<brakes tau="0.2"/>
+	</vehicle>
+	<vehicle id="bugatti-veyron" description="Bugatti Veyron">
+		<!-- Gearbox ratios -->
+		<gears>
+			<gear n="1" ratio="2.25"/>
+			<gear n="2" ratio="1.61"/>
+			<gear n="3" ratio="1.19"/>
+			<gear n="4" ratio="0.92"/>
+			<gear n="5" ratio="0.75"/>
+			<gear n="6" ratio="0.62"/>
+			<gear n="7" ratio="0.55"/>
+			<differential ratio="3.643"/>
+		</gears>
+		<!-- Mass in kilograms and mass factor considering engine rotational inertia -->
+		<mass mass="1900" massFactor="1.089"/>
+		<!-- Tracting wheels diameter in meters, friction coefficient, and parameters for rolling resistance -->
+		<wheels diameter="0.71" friction="1.1" cr1="0.0136" cr2="5.18e-7"/>
+		<!-- Air friction coefficients. Drag coefficient and maximum section in squared meters -->
+		<drag cAir="0.32" section="2.1"/>
+		<!-- Engine characteristics including power mapping parameters -->
+		<engine efficiency="0.9" cylinders="16" type="poly" maxRpm="7000" minRpm="1000" tauEx="0.1">
+			<power x0="148.963930699413" x1="-0.391263308810579" x2="0.000493162790906321" x3="-1.76150897505153e-07" x4="2.82601265913631e-11" x5="-1.68707494616654e-15"/>
+		</engine>
+		<!-- Gear shifting rules -->
+		<shifting rpm="6300" deltaRpm="200"/>
+		<!-- Brakes data. Tau is the actuation time in seconds. Other parameters such as friction are taken from the wheels section -->
+		<brakes tau="0.2"/>
+	</vehicle>
+	<vehicle id="audi-r8" description="Audi R8">
+		<!-- Gearbox ratios -->
+		<gears>
+			<gear n="1" ratio="4.373"/>
+			<gear n="2" ratio="2.709"/>
+			<gear n="3" ratio="1.878"/>
+			<gear n="4" ratio="1.411"/>
+			<gear n="5" ratio="1.126"/>
+			<gear n="6" ratio="0.928"/>
+			<differential ratio="3.462"/>
+		</gears>
+		<!-- Mass in kilograms and mass factor considering engine rotational inertia -->
+		<mass mass="1628" massFactor="1.089"/>
+		<!-- Tracting wheels diameter in meters, friction coefficient, and parameters for rolling resistance -->
+		<wheels diameter="0.66" friction="1" cr1="0.0136" cr2="5.18e-7"/>
+		<!-- Air friction coefficients. Drag coefficient and maximum section in squared meters -->
+		<drag cAir="0.30" section="2.1"/>
+		<!-- Engine characteristics including power mapping parameters -->
+		<engine efficiency="0.9" cylinders="8" type="poly" maxRpm="8750" minRpm="1500" tauEx="0.1">
+			<power x0="45.1859637473846" x1="-0.0291861008036701" x2="3.07914798702012e-05" x3="-3.74768401980442e-09" x4="1.23531013014598e-13"/>
+		</engine>
+		<!-- Gear shifting rules -->
+		<shifting rpm="8500" deltaRpm="200"/>
+		<!-- Brakes data. Tau is the actuation time in seconds. Other parameters such as friction are taken from the wheels section -->
+		<brakes tau="0.2"/>
+	</vehicle>
+</vehicles>
