@@ -18,6 +18,7 @@ import traci
 from traci import constants as tc
 import plexe
 import ccparams as cc
+from plexe.vehicle_data import VehicleData
 
 # lane change modes
 DEFAULT_LC = 0b1001010101
@@ -142,9 +143,7 @@ class PlexeImp(plexe.Plexe):
 
     def get_vehicle_data(self, vid):
         ret = self._get_par(vid, cc.PAR_SPEED_AND_ACCELERATION)
-        return {plexe.U: ret[2], plexe.ACCELERATION: ret[1],
-                plexe.SPEED: ret[0], plexe.POS_X: ret[3], plexe.POS_Y: ret[4],
-                plexe.TIME: ret[5]}
+        return VehicleData(None, ret[2], ret[1], ret[0], ret[3], ret[4], ret[5])
 
     def get_crashed(self, vid):
         ret = self._get_single_par(vid, cc.PAR_CRASHED)
@@ -174,29 +173,31 @@ class PlexeImp(plexe.Plexe):
 
     def get_stored_vehicle_data(self, vid, other_vid):
         ret = self._get_par(vid, cc.CC_PAR_VEHICLE_DATA, other_vid)
-        return {plexe.INDEX: ret[0], plexe.ACCELERATION: ret[2],
-                plexe.SPEED: ret[1], plexe.POS_X: ret[3], plexe.POS_Y: ret[4],
-                plexe.TIME: ret[5], plexe.LENGTH: ret[6]}
+        return VehicleData(ret[0], 0, ret[2], ret[1], ret[3], ret[4], ret[5],
+                           ret[6])
 
     def get_engine_data(self, vid):
         ret = self._get_par(vid, cc.PAR_ENGINE_DATA)
         return {plexe.GEAR: ret[0], plexe.RPM: ret[1]}
 
-    def set_vehicle_data(self, vid, index, acceleration, speed, pos_x, pos_y,
-                         time, length):
+    def set_vehicle_data(self, vid, vehicle_data):
         self._set_par(vid, cc.CC_PAR_VEHICLE_DATA,
-                      cc.pack(index, speed, acceleration, pos_x, pos_y, time,
-                              length))
+                      cc.pack(vehicle_data.index, vehicle_data.speed,
+                              vehicle_data.acceleration, vehicle_data.pos_x,
+                              vehicle_data.pos_y, vehicle_data.time,
+                              vehicle_data.length))
 
-    def set_leader_vehicle_data(self, vid, acceleration, speed, pos_x, pos_y,
-                                time):
+    def set_leader_vehicle_data(self, vid, vehicle_data):
         self._set_par(vid, cc.PAR_LEADER_SPEED_AND_ACCELERATION,
-                      cc.pack(speed, acceleration, pos_x, pos_y, time))
+                      cc.pack(vehicle_data.speed, vehicle_data.u,
+                              vehicle_data.pos_x, vehicle_data.pos_y,
+                              vehicle_data.time))
 
-    def set_front_vehicle_data(self, vid, acceleration, speed, pos_x, pos_y,
-                               time):
+    def set_front_vehicle_data(self, vid, vehicle_data):
         self._set_par(vid, cc.PAR_PRECEDING_SPEED_AND_ACCELERATION,
-                      cc.pack(speed, acceleration, pos_x, pos_y, time))
+                      cc.pack(vehicle_data.speed, vehicle_data.u,
+                              vehicle_data.pos_x, vehicle_data.pos_y,
+                              vehicle_data.time))
 
     def set_vehicle_position(self, vid, position):
         self._set_par(vid, cc.CC_PAR_VEHICLE_POSITION, position)
@@ -238,14 +239,13 @@ class PlexeImp(plexe.Plexe):
     def set_vehicles_file(self, vid, filename):
         self._set_par(vid, cc.CC_PAR_VEHICLES_FILE, filename)
 
-    def set_leader_vehicle_fake_data(self, vid, acceleration, speed):
-        self._set_par(vid, cc.PAR_LEADER_FAKE_DATA, cc.pack(speed,
-                                                            acceleration))
+    def set_leader_vehicle_fake_data(self, vid, vehicle_data):
+        self._set_par(vid, cc.PAR_LEADER_FAKE_DATA,
+                      cc.pack(vehicle_data.speed, vehicle_data.u))
 
-    def set_front_vehicle_fake_data(self, vid, acceleration, speed, distance):
-        self._set_par(vid, cc.PAR_FRONT_FAKE_DATA, cc.pack(speed,
-                                                           acceleration,
-                                                           distance))
+    def set_front_vehicle_fake_data(self, vid, vehicle_data, distance):
+        self._set_par(vid, cc.PAR_FRONT_FAKE_DATA,
+                      cc.pack(vehicle_data.speed, vehicle_data.u, distance))
 
     def set_acc_headway_time(self, vid, headway):
         self._set_par(vid, cc.PAR_ACC_HEADWAY_TIME, headway)

@@ -136,8 +136,7 @@ class Plexe(traci.StepListener):
         """
         Returns vehicle dynamics data of an automated vehicle
         :param vid: vehicle id
-        :return: a dictionary including the plexe.U, plexe.ACCELERATION,
-        plexe.SPEED, plexe.POS_X, plexe.POS_Y, plexe.TIME keys
+        :return: a VehicleData object
         """
         return self.plexe.get_vehicle_data(vid)
 
@@ -216,10 +215,8 @@ class Plexe(traci.StepListener):
         :param vid: vehicle id
         :param other_vid: index of the vehicle in the same platoon, NOT the
         sumo vehicle id
-        :return: a dictionary including the plexe.ACCELERATION, plexe.SPEED,
-        plexe.POS_X, plexe.POS_Y, plexe.TIME, plexe.INDEX, and plexe.LENGTH
-        keys. If the given index is greater or equal than the platoon size,
-        then the plexe.INDEX entry in the dictionary will be set to -1
+        :return: a VehicleData object. If the given index is greater or equal
+        than the platoon size, then the index will be set to -1
         """
         return self.plexe.get_stored_vehicle_data(vid, other_vid)
 
@@ -234,52 +231,32 @@ class Plexe(traci.StepListener):
         """
         return self.plexe.get_engine_data(vid)
 
-    def set_vehicle_data(self, vid, index, acceleration, speed, pos_x, pos_y,
-                         time, length):
+    def set_vehicle_data(self, vid, vehicle_data):
         """
         Sets information about a vehicle in the platoon. This is currently
         only used by the CONSENSUS controller. See also
         set_leader_vehicle_data and set_front_vehicle_data.
         :param vid: vehicle id, i.e., the vehicle that will store the
         information
-        :param index: index of the platoon member the data belongs to
-        :param acceleration: acceleration in m/s^2
-        :param speed: speed in m/s
-        :param pos_x: x position in m
-        :param pos_y: y position in m
-        :param time: time at which the information has been generated
-        :param length: length of the vehicle
+        :param vehicle_data: a VehicleData object
         """
-        return self.plexe.set_vehicle_data(vid, index, acceleration, speed,
-                                           pos_x, pos_y, time, length)
+        return self.plexe.set_vehicle_data(vid, vehicle_data)
 
-    def set_leader_vehicle_data(self, vid, acceleration, speed, pos_x, pos_y,
-                                time):
+    def set_leader_vehicle_data(self, vid, vehicle_data):
         """
         Sets data about the platoon leader
         :param vid: vehicle which stores the information
-        :param acceleration: acceleration of the leader in m/s^2
-        :param speed: speed of the leader in m/s
-        :param pos_x: x position of the leader in m
-        :param pos_y: y position of the leader in m
-        :param time: time at which the leader generated the data
+        :param vehicle_data: a VehicleData object
         """
-        return self.plexe.set_leader_vehicle_data(vid, acceleration, speed,
-                                                  pos_x, pos_y, time)
+        return self.plexe.set_leader_vehicle_data(vid, vehicle_data)
 
-    def set_front_vehicle_data(self, vid, acceleration, speed, pos_x, pos_y,
-                               time):
+    def set_front_vehicle_data(self, vid, vehicle_data):
         """
         Sets data about the front vehicle
         :param vid: vehicle which stores the information
-        :param acceleration: acceleration of the front vehicle in m/s^2
-        :param speed: speed of the front vehicle in m/s
-        :param pos_x: x position of the front vehicle in m
-        :param pos_y: y position of the front vehicle in m
-        :param time: time at which the front vehicle generated the data
+        :param vehicle_data: a VehicleData object
         """
-        return self.plexe.set_front_vehicle_data(vid, acceleration, speed,
-                                                 pos_x, pos_y, time)
+        return self.plexe.set_front_vehicle_data(vid, vehicle_data)
 
     def set_vehicle_position(self, vid, position):
         """
@@ -357,25 +334,25 @@ class Plexe(traci.StepListener):
         """
         return self.plexe.set_vehicles_file(vid, filename)
 
-    def set_leader_vehicle_fake_data(self, vid, acceleration, speed):
+    def set_leader_vehicle_fake_data(self, vid, vehicle_data):
         """
         Sets the leader vehicle data for the FAKED CACC controller
         :param vid: vehicle id
-        :param acceleration: leader acceleration in m/s^2
-        :param speed: leader speed in m/s
+        :param vehicle_data: a VehicleData object with u, acceleration,
+        and speed fields set
         """
-        return self.plexe.set_leader_vehicle_fake_data(vid, acceleration, speed)
+        return self.plexe.set_leader_vehicle_fake_data(vid, vehicle_data)
 
-    def set_front_vehicle_fake_data(self, vid, acceleration, speed, distance):
+    def set_front_vehicle_fake_data(self, vid, vehicle_data, distance):
         """
         Sets the front vehicle data for the FAKED CACC controller
         :param vid: vehicle id
-        :param acceleration: front vehicle acceleration in m/s^2
-        :param speed: front vehicle speed in m/s
+        :param vehicle_data: a VehicleData object with u, acceleration,
+        and speed fields set
         :param distance: distance to front vehicle in m
         """
-        return self.plexe.set_front_vehicle_fake_data(vid, acceleration,
-                                                      speed, distance)
+        return self.plexe.set_front_vehicle_fake_data(vid, vehicle_data,
+                                                      distance)
 
     def set_acc_headway_time(self, vid, headway):
         """
