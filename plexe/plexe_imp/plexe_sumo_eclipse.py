@@ -151,7 +151,7 @@ class PlexeImp(plexe.Plexe):
 
     def get_radar_data(self, vid):
         ret = self._get_par(vid, cc.PAR_RADAR_DATA)
-        return ret[0], ret[1]
+        return {plexe.RADAR_DISTANCE: ret[0], plexe.RADAR_REL_SPEED: ret[1]}
 
     def get_lanes_count(self, vid):
         return self._get_single_par(vid, cc.PAR_LANES_COUNT)

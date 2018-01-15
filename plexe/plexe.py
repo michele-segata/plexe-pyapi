@@ -43,6 +43,8 @@ INDEX = "index"
 LENGTH = "length"
 GEAR = "gear"
 RPM = "rpm"
+RADAR_DISTANCE = "rd"
+RADAR_REL_SPEED = "rs"
 
 ENGINE_MODEL_FOLM = 0x00
 ENGINE_MODEL_REALISTIC = 0x01
@@ -154,7 +156,8 @@ class Plexe(traci.StepListener):
         the front vehicle. If there is no front vehicle or it is too far (
         more than 250 meters) then the returned distance is set to -1
         :param vid: vehicle id
-        :return: a dictionary including plexe.GEAR and plexe.RPM keys
+        :return: a dictionary including plexe.RADAR_DISTANCE and
+        plexe.RADAR_REL_SPEED keys
         """
         return self.plexe.get_radar_data(vid)
 
