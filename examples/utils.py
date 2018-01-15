@@ -98,15 +98,16 @@ def communicate(plexe, topology):
             plexe.set_front_vehicle_fake_data(vid, fd, distance)
 
 
-def start_sumo(config_file, already_running):
+def start_sumo(config_file, already_running, gui=True):
     """
     Starts or restarts sumo with the given configuration file
     :param config_file: sumo configuration file
     :param already_running: if set to true then the command simply reloads
     the given config file, otherwise sumo is started from scratch
+    :param gui: start GUI or not
     """
     arguments = ["--lanechange.duration", "3", "-c"]
-    sumo_cmd = [sumolib.checkBinary('sumo-gui')]
+    sumo_cmd = [sumolib.checkBinary('sumo-gui' if gui else 'sumo')]
     arguments.append(config_file)
     if already_running:
         traci.load(arguments)
