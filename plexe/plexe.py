@@ -364,3 +364,13 @@ class Plexe(traci.StepListener):
         :param headway: headway in seconds
         """
         return self.plexe.set_acc_headway_time(vid, headway)
+
+    def use_controller_acceleration(self, vid, use):
+        """
+        Determines whether PATH's and PLOEG's CACCs should use the controller
+        or the real acceleration when computing the control action
+        :param vid: vehicle id
+        :param use: if set to true, the vehicle will use the controller
+        acceleration
+        """
+        return self.plexe.use_controller_acceleration(vid, use)

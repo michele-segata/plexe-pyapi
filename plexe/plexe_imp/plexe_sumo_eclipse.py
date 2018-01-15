@@ -173,8 +173,8 @@ class PlexeImp(plexe.Plexe):
 
     def get_stored_vehicle_data(self, vid, other_vid):
         ret = self._get_par(vid, cc.CC_PAR_VEHICLE_DATA, other_vid)
-        return VehicleData(ret[0], 0, ret[2], ret[1], ret[3], ret[4], ret[5],
-                           ret[6])
+        return VehicleData(ret[0], ret[7], ret[2], ret[1], ret[3], ret[4],
+                           ret[5], ret[6])
 
     def get_engine_data(self, vid):
         ret = self._get_par(vid, cc.PAR_ENGINE_DATA)
@@ -185,19 +185,19 @@ class PlexeImp(plexe.Plexe):
                       cc.pack(vehicle_data.index, vehicle_data.speed,
                               vehicle_data.acceleration, vehicle_data.pos_x,
                               vehicle_data.pos_y, vehicle_data.time,
-                              vehicle_data.length))
+                              vehicle_data.length, vehicle_data.u))
 
     def set_leader_vehicle_data(self, vid, vehicle_data):
         self._set_par(vid, cc.PAR_LEADER_SPEED_AND_ACCELERATION,
-                      cc.pack(vehicle_data.speed, vehicle_data.u,
+                      cc.pack(vehicle_data.speed, vehicle_data.acceleration,
                               vehicle_data.pos_x, vehicle_data.pos_y,
-                              vehicle_data.time))
+                              vehicle_data.time, vehicle_data.u))
 
     def set_front_vehicle_data(self, vid, vehicle_data):
         self._set_par(vid, cc.PAR_PRECEDING_SPEED_AND_ACCELERATION,
-                      cc.pack(vehicle_data.speed, vehicle_data.u,
+                      cc.pack(vehicle_data.speed, vehicle_data.acceleration,
                               vehicle_data.pos_x, vehicle_data.pos_y,
-                              vehicle_data.time))
+                              vehicle_data.time, vehicle_data.u))
 
     def set_vehicle_position(self, vid, position):
         self._set_par(vid, cc.CC_PAR_VEHICLE_POSITION, position)
@@ -241,11 +241,16 @@ class PlexeImp(plexe.Plexe):
 
     def set_leader_vehicle_fake_data(self, vid, vehicle_data):
         self._set_par(vid, cc.PAR_LEADER_FAKE_DATA,
-                      cc.pack(vehicle_data.speed, vehicle_data.u))
+                      cc.pack(vehicle_data.speed, vehicle_data.acceleration,
+                              vehicle_data.u))
 
     def set_front_vehicle_fake_data(self, vid, vehicle_data, distance):
         self._set_par(vid, cc.PAR_FRONT_FAKE_DATA,
-                      cc.pack(vehicle_data.speed, vehicle_data.u, distance))
+                      cc.pack(vehicle_data.speed, vehicle_data.acceleration,
+                              distance, vehicle_data.u))
 
     def set_acc_headway_time(self, vid, headway):
         self._set_par(vid, cc.PAR_ACC_HEADWAY_TIME, headway)
+
+    def use_controller_acceleration(self, vid, use):
+        self._set_par(vid, cc.PAR_USE_CONTROLLER_ACCELERATION, 1 if use else 0)
