@@ -374,3 +374,19 @@ class Plexe(traci.StepListener):
         acceleration
         """
         return self.plexe.use_controller_acceleration(vid, use)
+
+    def enable_auto_feed(self, vid, enable, leader_id=None, front_id=None):
+        """
+        Activates or deactivates autofeeding, meaning that the user is not
+        simulating inter-vehicle communication, so the CACCs will
+        automatically take the required data from other vehicles automatically
+        :param vid: vehicle id
+        :param enable: boolean to enable or disable auto feeding
+        :param leader_id: id of the leader vehicle. When disabling auto
+        feeding, this parameter can be omitted
+        :param front_id: id of the front vehicle. When disabling auto
+        feeding, this parameter can be omitted
+        """
+        if enable and (leader_id is None or front_id is None):
+            return False
+        return self.plexe.enable_auto_feed(vid, enable, leader_id, front_id)

@@ -254,3 +254,10 @@ class PlexeImp(plexe.Plexe):
 
     def use_controller_acceleration(self, vid, use):
         self._set_par(vid, cc.PAR_USE_CONTROLLER_ACCELERATION, 1 if use else 0)
+
+    def enable_auto_feed(self, vid, enable, leader_id=None, front_id=None):
+        if enable:
+            self._set_par(vid, cc.PAR_USE_AUTO_FEEDING,
+                          cc.pack(1, leader_id, front_id))
+        else:
+            self._set_par(vid, cc.PAR_USE_AUTO_FEEDING, 0)
