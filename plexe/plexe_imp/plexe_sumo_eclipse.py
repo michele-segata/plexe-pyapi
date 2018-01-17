@@ -135,6 +135,8 @@ class PlexeImp(plexe.Plexe):
         self.lane_changes[vid] = (lane, safe, False)
 
     def disable_fixed_lane(self, vid):
+        if vid in self.lane_changes.keys():
+            del self.lane_changes[vid]
         self._set_lane_change_mode(vid, False, False)
 
     def set_fixed_acceleration(self, vid, activate, acceleration):
