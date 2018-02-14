@@ -37,7 +37,7 @@ DISTANCE = 5
 # inter-vehicle distance when leaving space for joining
 JOIN_DISTANCE = DISTANCE * 2
 # cruising speed
-SPEED = 130 / 3.6
+SPEED = 120 / 3.6
 
 # maneuver states:
 GOING_TO_POSITION = 0
