@@ -390,3 +390,44 @@ class Plexe(traci.StepListener):
         if enable and (leader_id is None or front_id is None):
             return False
         return self.plexe.enable_auto_feed(vid, enable, leader_id, front_id)
+
+    def use_prediction(self, vid, enable):
+        """
+        Activates or deactivates prediction, i.e., interpolation of missing
+        data for the control system
+        :param vid: vehicle id
+        :param enable: boolean to enable or disable prediction
+        """
+        return self.plexe.use_prediction(vid, enable)
+
+    def add_member(self, vid, member_id, position):
+        """
+        Adds a platoon member to this vehicle, usually considered to be the
+        leader. Members are used to perform coordinated, whole-platoon lane
+        changes
+        :param vid: vehicle id
+        :param member_id: sumo id of the member being added
+        :param position: position (0-based) of the vehicle
+        """
+        return self.plexe.add_member(vid, member_id, position)
+
+    def remove_member(self, vid, member_id):
+        """
+        Removes a platoon member from this vehicle, usually considered to be
+        the leader. Members are used to perform coordinated, whole-platoon
+        lane changes
+        :param vid: vehicle id
+        :param member_id: sumo id of the member being removed
+        """
+        return self.plexe.remove_member(vid, member_id)
+
+    def enable_auto_lane_changing(self, vid, enable):
+        """
+        Enables/disables automatic, coordinated, whole-platoon lane changes.
+        This function should be invoked on the leader which decides whether
+        the platoon can gain speed by changing lane. The leader will then
+        check whether lane changing is possible and, in case, do so
+        :param vid: vehicle id
+        :param enable: enable or disable automatic platoon lane changes
+        """
+        return self.plexe.enable_auto_lane_changing(vid, enable)

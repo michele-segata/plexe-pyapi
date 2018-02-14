@@ -21,7 +21,7 @@ import ccparams as cc
 from plexe.vehicle_data import VehicleData
 
 # lane change modes
-DEFAULT_LC = 0b1001010101
+DEFAULT_LC = 0b011001010101
 DEFAULT_NOTRACI_LC = 0b1010101010
 FIX_LC = 0b1000000000
 FIX_LC_AGGRESSIVE = 0b0000000000
@@ -263,3 +263,15 @@ class PlexeImp(plexe.Plexe):
                           cc.pack(1, leader_id, front_id))
         else:
             self._set_par(vid, cc.PAR_USE_AUTO_FEEDING, 0)
+
+    def use_prediction(self, vid, enable):
+        self._set_par(vid, cc.PAR_USE_PREDICTION, 1 if enable else 0)
+
+    def add_member(self, vid, member_id, position):
+        self._set_par(vid, cc.PAR_ADD_MEMBER, cc.pack(member_id, position))
+
+    def remove_member(self, vid, member_id):
+        self._set_par(vid, cc.PAR_ADD_MEMBER, member_id)
+
+    def enable_auto_lane_changing(self, vid, enable):
+        self._set_par(vid, cc.PAR_ENABLE_AUTO_LANE_CHANGE, 1 if enable else 0)
