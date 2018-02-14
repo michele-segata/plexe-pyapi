@@ -55,6 +55,7 @@ def add_vehicles(plexe):
         plexe.set_vehicles_file(vid, "vehicles.xml")
         plexe.set_vehicle_model(vid, vid)
         plexe.set_fixed_acceleration(vid, True, 0)
+        traci.vehicle.setSpeedMode(vid, 0)
 
 
 def main(demo_mode, real_engine=True, setter=None):

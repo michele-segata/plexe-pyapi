@@ -64,6 +64,7 @@ def add_vehicles(plexe, n, real_engine=False):
         add_vehicle(plexe, vid, (n - i + 1) * (DISTANCE + LENGTH) + 50, 0,
                     SPEED, DISTANCE, real_engine)
         plexe.set_fixed_lane(vid, 0, safe=False)
+        traci.vehicle.setSpeedMode(vid, 0)
         plexe.use_controller_acceleration(vid, False)
         if i == 0:
             plexe.set_active_controller(vid, ACC)
