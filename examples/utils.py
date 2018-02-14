@@ -30,6 +30,33 @@ import traci
 from plexe import POS_X, POS_Y, ENGINE_MODEL_REALISTIC
 
 
+# lane change state bits
+bits = {
+    0: 'LCA_NONE',
+    1 << 0: 'LCA_STAY',
+    1 << 1: 'LCA_LEFT',
+    1 << 2: 'LCA_RIGHT',
+    1 << 3: 'LCA_STRATEGIC',
+    1 << 4: 'LCA_COOPERATIVE',
+    1 << 5: 'LCA_SPEEDGAIN',
+    1 << 6: 'LCA_KEEPRIGHT',
+    1 << 7: 'LCA_TRACI',
+    1 << 8: 'LCA_URGENT',
+    1 << 9: 'LCA_BLOCKED_BY_LEFT_LEADER',
+    1 << 10: 'LCA_BLOCKED_BY_LEFT_FOLLOWER',
+    1 << 11: 'LCA_BLOCKED_BY_RIGHT_LEADER',
+    1 << 12: 'LCA_BLOCKED_BY_RIGHT_FOLLOWER',
+    1 << 13: 'LCA_OVERLAPPING',
+    1 << 14: 'LCA_INSUFFICIENT_SPACE',
+    1 << 15: 'LCA_SUBLANE',
+    1 << 16: 'LCA_AMBLOCKINGLEADER',
+    1 << 17: 'LCA_AMBLOCKINGFOLLOWER',
+    1 << 18: 'LCA_MRIGHT',
+    1 << 19: 'LCA_MLEFT',
+    1 << 30: 'LCA_UNKNOWN'
+}
+
+
 def add_vehicle(plexe, vid, position, lane, speed, cacc_spacing,
                 real_engine=False, vtype="vtypeauto"):
     """
@@ -130,3 +157,20 @@ def running(demo_mode, step, max_step):
         return True
     else:
         return step <= max_step
+
+
+def get_status(status):
+    """
+    Returns a human readable representation of the lane change state of a
+    vehicle
+    :param status: the lane change state returned by getLaneChangeState
+    """
+    st = ""
+    for i in range(32):
+        mask = 1 << i
+        if status & mask:
+            if mask in bits.keys():
+                st += " " + bits[mask]
+            else:
+                st += " 2^" + str(i)
+    return st
