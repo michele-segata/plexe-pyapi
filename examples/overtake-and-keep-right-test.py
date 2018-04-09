@@ -30,9 +30,9 @@ def main(demo_mode, real_engine, setter=None):
     state_left = None
     state_right = None
     random.seed(1)
-    while running(demo_mode, step, 3500):
+    while running(demo_mode, step, 6000):
 
-        if demo_mode and step == 3500:
+        if demo_mode and step == 6000:
             start_sumo("cfg/freeway.sumo.cfg", True)
             step = 0
             random.seed(1)
