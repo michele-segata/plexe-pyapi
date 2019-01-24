@@ -17,7 +17,7 @@
 import traci
 from traci import constants as tc
 import plexe
-import ccparams as cc
+from plexe.plexe_imp import ccparams as cc
 from plexe.vehicle_data import VehicleData
 
 # lane change modes
@@ -104,7 +104,7 @@ class PlexeImp(plexe.Plexe):
 
     def step(self, step):
         satisfied = []
-        for vid, (lane, safe, wait) in self.lane_changes.iteritems():
+        for vid, (lane, safe, wait) in self.lane_changes.items():
             if wait:
                 lane, safe, wait = self.lane_changes[vid]
                 self.lane_changes[vid] = (lane, safe, False)

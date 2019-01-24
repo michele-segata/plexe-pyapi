@@ -107,7 +107,7 @@ def communicate(plexe, topology):
     vehicle and platoon leader. each entry of the dictionary is a dictionary
     which includes the keys "leader" and "front"
     """
-    for vid, l in topology.iteritems():
+    for vid, l in topology.items():
         if "leader" in l.keys():
             # get data about platoon leader
             ld = plexe.get_vehicle_data(l["leader"])
