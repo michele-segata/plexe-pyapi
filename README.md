@@ -81,10 +81,44 @@ and
 python dashboard-demo.py enginedemo.py
 ```
 
-Running the dashboard requires you to install `PyQT5`. These demos
-currently work with the latest experimental version of Plexe SUMO, which
-can be downloaded [here](https://github.com/michele-segata/sumo).
-Checkout and compile the `plexe-sumo-0.32.0` branch.
+Running the dashboard requires you to install `PyQt5`. These demos currently
+work with versions of Plexe SUMO starting from Plexe 2.1, which can be
+downloaded [here](https://github.com/michele-segata/plexe-sumo). Checkout and
+compile the `plexe-2.1` or the `master` branch.
 
 For more information on Plexe, visit
 [http://plexe.car2x.org](http://plexe.car2x.org).
+
+Installing PyQt5
+===
+
+On Python 3 PyQt5 is available as a binary package on `pip`. After installing
+Qt5 on your machine, PyQt5 can simply be installed by typing
+```
+sudo pip install PyQt5
+```
+or
+```
+pip install --user PyQt5
+```
+for a non system-wide installation.
+
+For Python 2.7, the user is required to download and compile the source packages
+for `sip` and for `PyQt5`. Download the lastest version of `sip` from
+[here](https://www.riverbankcomputing.com/software/sip/download). Unpack the
+sources and `cd` into the directory. Then type the following commands to
+configure, build, and install `sip`:
+```
+python configure.py --sip-module PyQt5.sip
+make
+sudo make install
+```
+Then download the `PyQt5` sources from
+[here](https://www.riverbankcomputing.com/software/pyqt/download5). Unpack the
+sources and `cd` into the directory. Then type the following commands to
+configure, build, and install `PyQt5`:
+```
+python configure.py
+make
+sudo make install
+```
