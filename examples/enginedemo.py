@@ -21,7 +21,7 @@
 import os
 import sys
 import random
-from utils import add_vehicle, start_sumo, running
+from utils import add_platooning_vehicle, start_sumo, running
 
 if 'SUMO_HOME' in os.environ:
     tools = os.path.join(os.environ['SUMO_HOME'], 'tools')
@@ -48,7 +48,7 @@ def add_vehicles(plexe):
     """
     for i in range(len(VEHICLES)):
         vid = VEHICLES[i]
-        add_vehicle(plexe, vid, 10, i, 0, 5)
+        add_platooning_vehicle(plexe, vid, 10, i, 0, 5)
         plexe.set_fixed_lane(vid, i, False)
         plexe.set_active_controller(vid, ACC)
         plexe.set_engine_model(vid, ENGINE_MODEL_REALISTIC)

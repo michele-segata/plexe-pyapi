@@ -57,8 +57,18 @@ bits = {
 }
 
 
-def add_vehicle(plexe, vid, position, lane, speed, cacc_spacing,
-                real_engine=False, vtype="vtypeauto"):
+def add_vehicle(plexe, vid, position, lane, speed, vtype="vtypeauto"):
+    if plexe.version[0] >= 1:
+        traci.vehicle.add(vid, "platoon_route", departPos=str(position),
+                          departSpeed=str(speed), departLane=str(lane),
+                          typeID=vtype)
+    else:
+        traci.vehicle.add(vid, "platoon_route", pos=position, speed=speed,
+                          lane=lane, typeID=vtype)
+
+
+def add_platooning_vehicle(plexe, vid, position, lane, speed, cacc_spacing,
+                           real_engine=False, vtype="vtypeauto"):
     """
     Adds a vehicle to the simulation
     :param plexe: API instance
@@ -70,8 +80,8 @@ def add_vehicle(plexe, vid, position, lane, speed, cacc_spacing,
     :param real_engine: use the realistic engine model or the first order lag
     model
     """
-    traci.vehicle.add(vid, "platoon_route", pos=position, speed=speed,
-                      lane=lane, typeID=vtype)
+    add_vehicle(plexe, vid, position, lane, speed, vtype)
+
     plexe.set_path_cacc_parameters(vid, cacc_spacing, 2, 1, 0.5)
     plexe.set_cc_desired_speed(vid, speed)
     plexe.set_acc_headway_time(vid, 1.5)

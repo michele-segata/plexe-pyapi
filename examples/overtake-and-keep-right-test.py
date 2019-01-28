@@ -11,14 +11,8 @@ else:
     sys.exit("please declare environment variable 'SUMO_HOME'")
 import traci
 from plexe import Plexe, ACC, GEAR, RPM
-from utils import start_sumo, running, get_status
-import utils
-
-
-def add_vehicle(vid, position, lane, speed, vtype="vtypeauto"):
-    traci.vehicle.add(vid, "platoon_route",
-                      pos=position, speed=speed, lane=lane,
-                      typeID=vtype)
+from utils import start_sumo, running, get_status, add_platooning_vehicle, \
+    add_vehicle
 
 
 def main(demo_mode, real_engine, setter=None):
@@ -40,9 +34,9 @@ def main(demo_mode, real_engine, setter=None):
         traci.simulationStep()
 
         if step == 1:
-            utils.add_vehicle(plexe, "p0", 150, 0, 25, 5, real_engine)
-            add_vehicle("v0", 140, 1, 25, "passenger")
-            add_vehicle("v1", 250, 0, 20, "passenger2")
+            add_platooning_vehicle(plexe, "p0", 150, 0, 25, 5, real_engine)
+            add_vehicle(plexe, "v0", 140, 1, 25, "passenger")
+            add_vehicle(plexe, "v1", 250, 0, 20, "passenger2")
             traci.gui.trackVehicle("View #0", "p0")
             traci.gui.setZoom("View #0", 50000)
             plexe.set_active_controller("p0", ACC)

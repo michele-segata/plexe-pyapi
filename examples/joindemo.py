@@ -19,7 +19,8 @@
 import os
 import sys
 import random
-from utils import add_vehicle, communicate, get_distance, start_sumo, running
+from utils import add_platooning_vehicle, communicate, get_distance, \
+    start_sumo, running
 
 if 'SUMO_HOME' in os.environ:
     tools = os.path.join(os.environ['SUMO_HOME'], 'tools')
@@ -70,8 +71,8 @@ def add_vehicles(plexe, n, real_engine=False):
     topology = {}
     for i in range(n):
         vid = "v.%d" % i
-        add_vehicle(plexe, vid, (n - i + 1) * (DISTANCE + LENGTH) + 50, 0,
-                    SPEED, DISTANCE, real_engine)
+        add_platooning_vehicle(plexe, vid, (n - i + 1) * (DISTANCE + LENGTH) +
+                               50, 0, SPEED, DISTANCE, real_engine)
         plexe.set_fixed_lane(vid, 0, safe=False)
         traci.vehicle.setSpeedMode(vid, 0)
         if i == 0:
@@ -82,7 +83,7 @@ def add_vehicles(plexe, n, real_engine=False):
             topology[vid] = {"front": "v.%d" % (i - 1), "leader": LEADER}
     # add a vehicle that wants to join the platoon
     vid = "v.%d" % n
-    add_vehicle(plexe, vid, 10, 1, SPEED, DISTANCE, real_engine)
+    add_platooning_vehicle(plexe, vid, 10, 1, SPEED, DISTANCE, real_engine)
     plexe.set_fixed_lane(vid, 1, safe=False)
     traci.vehicle.setSpeedMode(vid, 0)
     plexe.set_active_controller(vid, ACC)

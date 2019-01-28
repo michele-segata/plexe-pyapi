@@ -22,7 +22,8 @@ import random
 
 import math
 
-from utils import add_vehicle, communicate, get_distance, start_sumo, running
+from utils import add_platooning_vehicle, communicate, get_distance, \
+    start_sumo, running
 
 if 'SUMO_HOME' in os.environ:
     tools = os.path.join(os.environ['SUMO_HOME'], 'tools')
@@ -61,8 +62,8 @@ def add_vehicles(plexe, n, real_engine=False):
     # add a platoon of n vehicles
     for i in range(n):
         vid = "v.%d" % i
-        add_vehicle(plexe, vid, (n - i + 1) * (DISTANCE + LENGTH) + 50, 0,
-                    SPEED, DISTANCE, real_engine)
+        add_platooning_vehicle(plexe, vid, (n - i + 1) * (DISTANCE + LENGTH)
+                               + 50, 0, SPEED, DISTANCE, real_engine)
         plexe.set_fixed_lane(vid, 0, safe=False)
         traci.vehicle.setSpeedMode(vid, 0)
         plexe.use_controller_acceleration(vid, False)

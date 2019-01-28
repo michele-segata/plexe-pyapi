@@ -12,8 +12,7 @@ else:
 import traci
 from traci import constants as tc
 from plexe import Plexe, ACC, CACC, GEAR, RPM
-from utils import start_sumo, running
-import utils
+from utils import start_sumo, running, add_platooning_vehicle, add_vehicle
 
 
 # vehicle length
@@ -40,8 +39,8 @@ def add_vehicles(plexe, n, position, real_engine=False):
     # add a platoon of n vehicles
     for i in range(n):
         vid = "p.%d" % i
-        utils.add_vehicle(plexe, vid, position - i * (DISTANCE + LENGTH), 0,
-                          SPEED, DISTANCE, real_engine)
+        add_platooning_vehicle(plexe, vid, position - i * (DISTANCE + LENGTH),
+                               0, SPEED, DISTANCE, real_engine)
         plexe.set_fixed_lane(vid, 0, safe=False)
         traci.vehicle.setSpeedMode(vid, 0)
         if i == 0:
@@ -51,11 +50,6 @@ def add_vehicles(plexe, n, position, real_engine=False):
             plexe.set_active_controller(vid, CACC)
             plexe.enable_auto_feed(vid, True, LEADER, "p.%d" % (i-1))
             plexe.add_member(LEADER, vid, i)
-
-
-def add_vehicle(vid, position, lane, speed, vtype="vtypeauto"):
-    traci.vehicle.add(vid, "platoon_route", pos=position, speed=speed,
-                      lane=lane, typeID=vtype)
 
 
 def main(demo_mode, real_engine, setter=None):
@@ -77,8 +71,8 @@ def main(demo_mode, real_engine, setter=None):
 
         if step == 1:
             add_vehicles(plexe, N_VEHICLES, 150, real_engine)
-            add_vehicle("v0", 140, 1, 25, "passenger")
-            add_vehicle("v1", 250, 0, 20, "passenger2")
+            add_vehicle(plexe, "v0", 140, 1, 25, "passenger")
+            add_vehicle(plexe, "v1", 250, 0, 20, "passenger2")
             traci.gui.trackVehicle("View #0", LEADER)
             traci.gui.setZoom("View #0", 50000)
 
