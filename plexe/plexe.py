@@ -51,6 +51,16 @@ ENGINE_MODEL_REALISTIC = 0x01
 
 
 class Plexe(traci.StepListener):
+
+    latest = [1, 1, 0]
+    versions = {
+        'SUMO d1422e4780a': [0, 32, 0],
+        'SUMO 619df188ac3': [0, 32, 0],
+        'SUMO 1.0.1': [1, 0, 1],
+        'SUMO 1.1.0': [1, 1, 0],
+        'SUMO v1_1_0': [1, 1, 0]
+    }
+
     def __init__(self):
         """
         Constructor. Instantiates methods' implementation depending on SUMO
@@ -58,11 +68,21 @@ class Plexe(traci.StepListener):
         """
         self.plexe = None
         api, version = traci.getVersion()
+        if version in self.versions:
+            self.version = self.versions[version]
+        else:
+            self.version = self.latest
+            for k, v in self.versions.items():
+                if version.startswith(k):
+                    self.version = self.versions[k]
+                    break
+
         files = listdir(join(dirname(__file__), "plexe_imp"))
         plexe_f, plexe_fn, plexe_d = imp.find_module("plexe_imp",
                                                      [dirname(__file__)])
         plexe_imp = imp.load_module("plexe_imp", plexe_f, plexe_fn,
                                     plexe_d)
+        default_impl = None
         for f in files:
             name, ext = splitext(f)
             if ext == ".py":
@@ -81,6 +101,10 @@ class Plexe(traci.StepListener):
                     if version.startswith(v):
                         self.plexe = instance
                         break
+                if 'default' in versions:
+                    default_impl = instance
+        if self.plexe is None:
+            self.plexe = default_impl
         if self.plexe is None:
             print("No Plexe API implementation found for %s" % version)
             raise Exception()

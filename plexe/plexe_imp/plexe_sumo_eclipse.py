@@ -34,10 +34,12 @@ class PlexeImp(plexe.Plexe):
 
     def __init__(self):
         self.__versions = [
-            "SUMO 0.31.0",
-            "SUMO 0.32.0",
-            "SUMO v0_31_0",
-            "SUMO v0_32_0"
+            'default',
+            'SUMO d1422e4780a',
+            'SUMO 619df188ac3',
+            'SUMO 1.0.1',
+            'SUMO 1.1.0',
+            'SUMO v1_1_0',
         ]
         self.lane_changes = {}
 
