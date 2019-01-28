@@ -87,6 +87,7 @@ class Plexe(traci.StepListener):
 
     def step(self, step):
         self.plexe.step(step)
+        return True
 
     def set_cc_desired_speed(self, vid, speed):
         """
