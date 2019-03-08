@@ -12,10 +12,20 @@ Clone the repository and then install the APIs using `pip`:
 cd plexe-pyapi
 sudo pip install .
 ```
+or
+```
+pip install --user .
+```
+if you don't want to install the APIs system-wide.
 To uninstall them:
 ```
 sudo pip uninstall PlexeAPI
 ```
+or
+```
+pip uninstall PlexeAPI
+```
+if you have chosen the user installation.
 
 Usage
 -----
