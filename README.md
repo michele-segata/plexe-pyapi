@@ -132,3 +132,30 @@ python configure.py
 make
 sudo make install
 ```
+
+References
+===
+
+If you use `Plexe` for your scientific work please consider citing it using the
+following reference:
+```
+Michele Segata, Stefan Joerer, Bastian Bloessl, Christoph Sommer, Falko Dressler
+and Renato Lo Cigno, "PLEXE: A Platooning Extension for Veins," Proceedings of
+6th IEEE Vehicular Networking Conference (VNC 2014), Paderborn, Germany,
+December 2014.
+```
+For `LaTeX`, use the following `BibTeX`:
+```
+@inproceedings{segata2014plexe,
+  author = {Segata, Michele and Joerer, Stefan and Bloessl, Bastian and Sommer,
+            Christoph and Dressler, Falko and Lo Cigno, Renato},
+  title = {{PLEXE: A Platooning Extension for Veins}},
+  booktitle = {6th IEEE Vehicular Networking Conference (VNC 2014)},
+  pages = {53-60},
+  year = {2014},
+  month = {December},
+  address = {Paderborn, Germany},
+  publisher = {IEEE},
+  doi = {10.1109/VNC.2014.7013309}
+}
+```
