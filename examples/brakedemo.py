@@ -129,4 +129,4 @@ def main(demo_mode, real_engine, setter=None):
 
 
 if __name__ == "__main__":
-    main(True, True)
+    main(True, False)
