@@ -16,7 +16,7 @@
 #
 from os import environ, listdir
 from os.path import join, splitext, dirname
-import imp
+from importlib import import_module
 import sys
 if 'SUMO_HOME' in environ:
     tools = join(environ['SUMO_HOME'], 'tools')
@@ -78,20 +78,11 @@ class Plexe(traci.StepListener):
                     break
 
         files = listdir(join(dirname(__file__), "plexe_imp"))
-        plexe_f, plexe_fn, plexe_d = imp.find_module("plexe_imp",
-                                                     [dirname(__file__)])
-        plexe_imp = imp.load_module("plexe_imp", plexe_f, plexe_fn,
-                                    plexe_d)
         default_impl = None
         for f in files:
             name, ext = splitext(f)
             if ext == ".py":
-                mod_f, mod_fn, mod_d = imp.find_module(name, plexe_imp.__path__)
-                try:
-                    mod = imp.load_module("plexe.plexe_imp." + name, mod_f,
-                                          mod_fn, mod_d)
-                except ImportError:
-                    continue
+                mod = import_module(".{}".format(name), "plexe.plexe_imp")
                 try:
                     instance = mod.PlexeImp()
                 except AttributeError:
