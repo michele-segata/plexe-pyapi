@@ -7,25 +7,38 @@ by Plexe in SUMO.
 Installation
 ------------
 
-Clone the repository and then install the APIs using `pip`:
+* Change the directory to the folder you want to download the library in. For example
 ```
 cd plexe-pyapi
-sudo pip install .
 ```
-or
+
+* Clone the repository:
+```  
+git clone  https://github.com/michele-segata/plexe-pyapi.git
 ```
+
+* To build, perform only one of these:
+
+a) to install system-wide (note the dot at the end)
+``` 
+sudo pip install .   
+``` 
+  
+  b) to install for the current user only (note the dot at the end)
+```  
 pip install --user .
-```
-if you don't want to install the APIs system-wide.
+``` 
+
+* Note: if you don't want to install the APIs system-wide.
 To uninstall them:
 ```
 sudo pip uninstall PlexeAPI
 ```
-or
+* or if you have chosen the user installation:
 ```
 pip uninstall PlexeAPI
 ```
-if you have chosen the user installation.
+
 
 Usage
 -----
@@ -112,6 +125,11 @@ or
 pip install --user PyQt5
 ```
 for a non system-wide installation.
+
+If you have a Conda environment simply do:
+```
+conda install pyqt=5
+```
 
 For Python 2.7, the user is required to download and compile the source packages
 for `sip` and for `PyQt5`. Download the lastest version of `sip` from
