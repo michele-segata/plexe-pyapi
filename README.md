@@ -66,11 +66,11 @@ file, while the second inside `enginedemo.py`. You can simply run them
 using
 
 ```
-python joindemo.py
+python3 joindemo.py
 ```
 and
 ```
-python enginedemo.py
+python3 enginedemo.py
 ```
 
 After running for a certain amount of time, both demo resets and
