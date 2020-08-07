@@ -7,34 +7,35 @@ by Plexe in SUMO.
 Installation
 ------------
 
-* Change the directory to the folder you want to download the library in. For example
+Change the directory to the folder you want to download the library in. For example:
 ```
+cd ~/src
+```
+
+Clone the repository:
+```  
+git clone  https://github.com/michele-segata/plexe-pyapi.git
 cd plexe-pyapi
 ```
 
-* Clone the repository:
-```  
-git clone  https://github.com/michele-segata/plexe-pyapi.git
-```
+To build, perform only one of these:
 
-* To build, perform only one of these:
-
-a) to install system-wide (note the dot at the end)
+* to install system-wide (note the dot at the end)
 ``` 
 sudo pip install .   
 ``` 
   
-  b) to install for the current user only (note the dot at the end)
+* to install for the current user only (note the dot at the end)
 ```  
 pip install --user .
 ``` 
 
-* Note: if you don't want to install the APIs system-wide.
+Note: if you don't want to install the APIs system-wide.
 To uninstall them:
 ```
 sudo pip uninstall PlexeAPI
 ```
-* or if you have chosen the user installation:
+or if you have chosen the user installation:
 ```
 pip uninstall PlexeAPI
 ```
