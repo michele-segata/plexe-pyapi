@@ -158,23 +158,22 @@ References
 If you use `Plexe` for your scientific work please consider citing it using the
 following reference:
 ```
-Michele Segata, Stefan Joerer, Bastian Bloessl, Christoph Sommer, Falko Dressler
-and Renato Lo Cigno, "PLEXE: A Platooning Extension for Veins," Proceedings of
-6th IEEE Vehicular Networking Conference (VNC 2014), Paderborn, Germany,
-December 2014.
+Michele Segata, Renato Lo Cigno, Tobias Hardes, Julian Heinovski, Max Schettler,
+Bastian Bloessl, Christoph Sommer and Falko Dressler, "Multi-Technology
+Cooperative Driving: An Analysis Based on PLEXE," IEEE Transactions on Mobile
+Computing (TMC), 2022.
 ```
 For `LaTeX`, use the following `BibTeX`:
 ```
-@inproceedings{segata2014plexe,
-  author = {Segata, Michele and Joerer, Stefan and Bloessl, Bastian and Sommer,
-            Christoph and Dressler, Falko and Lo Cigno, Renato},
-  title = {{PLEXE: A Platooning Extension for Veins}},
-  booktitle = {6th IEEE Vehicular Networking Conference (VNC 2014)},
-  pages = {53-60},
-  year = {2014},
-  month = {December},
-  address = {Paderborn, Germany},
+@article{segata2022multi-technology,
+  author = {Segata, Michele and Lo Cigno, Renato and Hardes, Tobias and
+            Heinovski, Julian and Schettler, Max and Bloessl, Bastian and
+            Sommer, Christoph and Dressler, Falko},
+  doi = {10.1109/TMC.2022.3154643},
+  title = {{Multi-Technology Cooperative Driving: An Analysis Based on PLEXE}},
+  journal = {IEEE Transactions on Mobile Computing (TMC)},
+  issn = {1536-1233},
   publisher = {IEEE},
-  doi = {10.1109/VNC.2014.7013309}
+  year = {2022},
 }
 ```
