@@ -1,9 +1,9 @@
 <routes>
 	<vType id="vtypeauto" accel="2.5" decel="8" sigma="0.5" length="4"
-		   minGap="0" maxSpeed="36" color="1,0,0" probability="1"
+		   minGap="0" maxSpeed="1000" color="1,0,0" probability="1"
 		   carFollowModel="CC" tauEngine="0.5" omegaN="0.2" xi="1" c1="0.5"
 		   lanesCount="4" ccAccel="1.5" ploegKp="0.2" ploegKd="0.7"
-		   ploegH="0.5" />
+		   ploegH="0.5" speedFactor="2" />
 	<vType id="passenger" accel="1.5" decel="4.5" sigma="0.5" length="4"
 		   minGap="0" maxSpeed="36.11" color="0.16,0.33,0.42" vClass="passenger"
 		   guiShape="passenger" speedFactor="1" departSpeed="max"
