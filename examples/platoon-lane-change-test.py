@@ -41,7 +41,7 @@ def add_vehicles(plexe, n, position, real_engine=False):
         vid = "p.%d" % i
         add_platooning_vehicle(plexe, vid, position - i * (DISTANCE + LENGTH),
                                0, SPEED, DISTANCE, real_engine)
-        plexe.set_fixed_lane(vid, 0, safe=False)
+        plexe.set_fixed_lane(vid, 0, safe=True if i == 0 else False)
         traci.vehicle.setSpeedMode(vid, 0)
         if i == 0:
             plexe.set_active_controller(vid, ACC)

@@ -4,6 +4,8 @@ import os
 import random
 import sys
 
+from plexe.plexe_imp.plexe_sumo_eclipse import FIX_LC
+
 if 'SUMO_HOME' in os.environ:
     tools = os.path.join(os.environ['SUMO_HOME'], 'tools')
     sys.path.append(tools)
@@ -35,6 +37,8 @@ def main(demo_mode, real_engine, setter=None):
 
         if step == 1:
             add_platooning_vehicle(plexe, "p0", 150, 0, 25, 5, real_engine)
+            traci.vehicle.setLaneChangeMode("p0", FIX_LC)
+            plexe.enable_auto_lane_changing("p0", True)
             add_vehicle(plexe, "v0", 140, 1, 25, "passenger")
             add_vehicle(plexe, "v1", 250, 0, 20, "passenger2")
             traci.gui.trackVehicle("View #0", "p0")

@@ -3,14 +3,15 @@
 		   minGap="0" maxSpeed="1000" color="1,0,0" probability="1"
 		   carFollowModel="CC" tauEngine="0.5" omegaN="0.2" xi="1" c1="0.5"
 		   lanesCount="4" ccAccel="1.5" ploegKp="0.2" ploegKd="0.7"
-		   ploegH="0.5" speedFactor="2" />
+		   ploegH="0.5" speedFactor="2"
+		   lcStrategic="10" lcCooperative="10" lcSpeedGain="10" lcKeepRight="10"/>
 	<vType id="passenger" accel="1.5" decel="4.5" sigma="0.5" length="4"
-		   minGap="0" maxSpeed="36.11" color="0.16,0.33,0.42" vClass="passenger"
+		   minGap="2.5" maxSpeed="36.11" color="0.16,0.33,0.42" vClass="passenger"
 		   guiShape="passenger" speedFactor="1" departSpeed="max"
 		   carFollowModel="IDM" />
 	<vType id="passenger2" accel="1.5" decel="4.5" sigma="0.5" length="4"
-		   minGap="0" maxSpeed="20" color="0.16,0.33,0.42" vClass="passenger"
+		   minGap="2.5" maxSpeed="20" color="0.16,0.33,0.42" vClass="passenger"
 		   guiShape="passenger" speedFactor="1" departSpeed="max"
-	       carFollowModel="IDM" />
+		   carFollowModel="IDM" />
 	<route id="platoon_route" edges="edge_0_0 edge_0_1 edge_0_2 edge_0_3 edge_1_0 edge_1_1 edge_1_2 edge_1_3 edge_2_0 edge_2_1 edge_2_2 edge_2_3 edge_3_0 edge_3_1 edge_3_2 edge_3_3 edge_4_0 edge_4_1 edge_4_4 edge_4_6 absorption_4"/>
 </routes>
