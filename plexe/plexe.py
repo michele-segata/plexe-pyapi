@@ -442,8 +442,21 @@ class Plexe(traci.StepListener):
         Enables/disables automatic, coordinated, whole-platoon lane changes.
         This function should be invoked on the leader which decides whether
         the platoon can gain speed by changing lane. The leader will then
-        check whether lane changing is possible and, in case, do so
+        check whether lane changing is possible and, in case, do so.
+        Enabling auto lane changing disables a platoon lane change
+        requested through perform_platoon_lane_change().
         :param vid: vehicle id
         :param enable: enable or disable automatic platoon lane changes
         """
         return self.plexe.enable_auto_lane_changing(vid, enable)
+
+    def perform_platoon_lane_change(self, vid, lane):
+        """
+        Performs a platoon lane change towards a desired lane. Before doing
+        so, the leader checks whether it is safe to do so for all the
+        members.
+        Calling this method disables automatic lane changing.
+        :param vid: leader vehicle id
+        :param lane: lane index the platoon should move to
+        """
+        return self.plexe.perform_platoon_lane_change(vid, lane)

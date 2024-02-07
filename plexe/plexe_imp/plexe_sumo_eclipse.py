@@ -277,3 +277,6 @@ class PlexeImp(plexe.Plexe):
 
     def enable_auto_lane_changing(self, vid, enable):
         self._set_par(vid, cc.PAR_ENABLE_AUTO_LANE_CHANGE, 1 if enable else 0)
+
+    def perform_platoon_lane_change(self, vid, lane):
+        return self._set_par(vid, cc.PAR_PLATOON_FIXED_LANE, lane)

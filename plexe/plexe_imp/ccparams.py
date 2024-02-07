@@ -71,6 +71,8 @@ PAR_USE_PREDICTION = "ccup"
 PAR_ADD_MEMBER = "ccam"
 PAR_REMOVE_MEMBER = "ccrm"
 PAR_ENABLE_AUTO_LANE_CHANGE = "ccalc"
+PAR_PLATOON_FIXED_LANE = "ccpfl"
+
 
 SEP = ':'
 ESC = '\\'
