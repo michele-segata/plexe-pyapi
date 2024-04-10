@@ -81,7 +81,6 @@ def main(demo_mode, real_engine, setter=None):
     gui = True
     start_sumo("cfg/freeway.sumo.cfg", False, gui=gui)
     plexe = Plexe()
-    traci.addStepListener(plexe)
     step = 0
     while running(demo_mode, step, 6000):
 

@@ -85,7 +85,6 @@ def main(demo_mode, real_engine, setter=None):
     random.seed(1)
     start_sumo("cfg/freeway.sumo.cfg", False)
     plexe = Plexe()
-    traci.addStepListener(plexe)
     step = 0
     topology = dict()
     min_dist = 1e6

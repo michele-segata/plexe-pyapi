@@ -157,7 +157,6 @@ def main(demo_mode, real_engine, setter=None):
     random.seed(1)
     start_sumo("cfg/freeway.sumo.cfg", False)
     plexe = Plexe()
-    traci.addStepListener(plexe)
     step = 0
     state = GOING_TO_POSITION
     while running(demo_mode, step, 6000):

@@ -21,7 +21,6 @@ def main(demo_mode, real_engine, setter=None):
 
     start_sumo("cfg/freeway.sumo.cfg", False)
     plexe = Plexe()
-    traci.addStepListener(plexe)
     step = 0
     state_left = None
     state_right = None
@@ -37,7 +36,6 @@ def main(demo_mode, real_engine, setter=None):
 
         if step == 1:
             add_platooning_vehicle(plexe, "p0", 150, 0, 25, 5, real_engine)
-            traci.vehicle.setLaneChangeMode("p0", FIX_LC)
             plexe.enable_auto_lane_changing("p0", True)
             add_vehicle(plexe, "v0", 140, 1, 25, "passenger")
             add_vehicle(plexe, "v1", 250, 0, 20, "passenger2")

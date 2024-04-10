@@ -82,51 +82,6 @@ class PlexeImp(plexe.Plexe):
         ret = PlexeImp._get_par(vid, par, *args)
         return ret[0]
 
-    @staticmethod
-    def _set_lane_change_mode(vid, safe, fixed):
-        if not fixed:
-            traci.vehicle.setLaneChangeMode(vid, DEFAULT_LC)
-        else:
-            if safe:
-                traci.vehicle.setLaneChangeMode(vid, FIX_LC)
-            else:
-                traci.vehicle.setLaneChangeMode(vid, FIX_LC_AGGRESSIVE)
-
-    def _change_lane(self, vid, current, direction, safe=True):
-        if safe:
-            self._set_lane_change_mode(vid, safe, True)
-            traci.vehicle.changeLane(vid, current + direction, 0)
-        else:
-            state, state2 = traci.vehicle.getLaneChangeState(vid, direction)
-            if state & tc.LCA_OVERLAPPING == 0:
-                self._set_lane_change_mode(vid, safe, True)
-                traci.vehicle.changeLane(vid, current + direction, 0)
-                lane, safe, wait = self.lane_changes[vid]
-                self.lane_changes[vid] = (lane, safe, True)
-
-    def step(self, step):
-        satisfied = []
-        for vid, (lane, safe, wait) in self.lane_changes.items():
-            if wait:
-                lane, safe, wait = self.lane_changes[vid]
-                self.lane_changes[vid] = (lane, safe, False)
-                continue
-            current = traci.vehicle.getLaneIndex(vid)
-            n_lanes = lane - current
-            if n_lanes > 0:
-                direction = 1
-            elif n_lanes < 0:
-                direction = -1
-            else:
-                direction = 0
-            if direction == 0:
-                satisfied.append(vid)
-                self._set_lane_change_mode(vid, safe, True)
-            else:
-                self._change_lane(vid, current, direction, safe)
-        for vid in satisfied:
-            del self.lane_changes[vid]
-
     def set_cc_desired_speed(self, vid, speed):
         self._set_par(vid, cc.PAR_CC_DESIRED_SPEED, speed)
 
@@ -134,12 +89,11 @@ class PlexeImp(plexe.Plexe):
         self._set_par(vid, cc.PAR_ACTIVE_CONTROLLER, controller)
 
     def set_fixed_lane(self, vid, lane, safe=True):
-        self.lane_changes[vid] = (lane, safe, False)
-
-    def disable_fixed_lane(self, vid):
-        if vid in self.lane_changes.keys():
-            del self.lane_changes[vid]
-        self._set_lane_change_mode(vid, False, False)
+        if lane == -1:
+            traci.vehicle.setLaneChangeMode(vid, DEFAULT_LC)
+        else:
+            traci.vehicle.setLaneChangeMode(vid, FIX_LC)
+            self.perform_platoon_lane_change(vid, lane)
 
     def set_fixed_acceleration(self, vid, activate, acceleration):
         self._set_par(vid, cc.PAR_FIXED_ACCELERATION,

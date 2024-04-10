@@ -101,7 +101,6 @@ class Plexe(traci.StepListener):
             raise Exception()
 
     def step(self, step):
-        self.plexe.step(step)
         return True
 
     def set_cc_desired_speed(self, vid, speed):
@@ -130,14 +129,6 @@ class Plexe(traci.StepListener):
         as soon as possible
         """
         self.plexe.set_fixed_lane(vid, lane, safe)
-
-    def disable_fixed_lane(self, vid):
-        """
-        Disables the fixed lane set with set_fixed_lane and gives lane change
-        decisions back to the lane change model
-        :param vid: vehicle id
-        """
-        self.plexe.disable_fixed_lane(vid)
 
     def set_fixed_acceleration(self, vid, activate, acceleration):
         """
