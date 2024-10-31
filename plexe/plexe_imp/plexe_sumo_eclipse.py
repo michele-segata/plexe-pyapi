@@ -223,6 +223,14 @@ class PlexeImp(plexe.Plexe):
     def use_prediction(self, vid, enable):
         self._set_par(vid, cc.PAR_USE_PREDICTION, 1 if enable else 0)
 
+    def set_platoon_formation(self, vid, members):
+        """
+        Sets the platoon formation for vid
+        :param vid: vehicle for which the formation should be set
+        :param members: list of strings with all the ids of the vehicle, in order of position
+        """
+        self._set_par(vid, cc.PAR_SET_PLATOON_FORMATION, cc.pack(len(members), *members))
+
     def add_member(self, vid, member_id, position):
         self._set_par(vid, cc.PAR_ADD_MEMBER, cc.pack(member_id, position))
 

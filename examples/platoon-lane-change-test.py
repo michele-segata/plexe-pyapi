@@ -49,7 +49,9 @@ def add_vehicles(plexe, n, position, real_engine=False):
         else:
             plexe.set_active_controller(vid, CACC)
             plexe.enable_auto_feed(vid, True, LEADER, "p.%d" % (i-1))
-            plexe.add_member(LEADER, vid, i)
+    members = ["p.%d" % i for i in range(n)]
+    for vid in members:
+        plexe.set_platoon_formation(vid, members)
 
 
 def main(demo_mode, real_engine, setter=None):

@@ -407,6 +407,14 @@ class Plexe(traci.StepListener):
         """
         return self.plexe.use_prediction(vid, enable)
 
+    def set_platoon_formation(self, vid, members):
+        """
+        Sets the platoon formation for vid
+        :param vid: vehicle for which the formation should be set
+        :param members: list of strings with all the ids of the vehicle, in order of position
+        """
+        return self.plexe.set_platoon_formation(vid, members)
+
     def add_member(self, vid, member_id, position):
         """
         Adds a platoon member to this vehicle, usually considered to be the

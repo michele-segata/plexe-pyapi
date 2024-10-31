@@ -69,6 +69,7 @@ def add_vehicles(plexe, n, real_engine=False):
     """
     # add a platoon of n vehicles
     topology = {}
+    members = ["v.%d" % i for i in range(n)]
     for i in range(n):
         vid = "v.%d" % i
         add_platooning_vehicle(plexe, vid, (n - i + 1) * (DISTANCE + LENGTH) +
@@ -88,6 +89,10 @@ def add_vehicles(plexe, n, real_engine=False):
     traci.vehicle.setSpeedMode(vid, 0)
     plexe.set_active_controller(vid, ACC)
     plexe.set_path_cacc_parameters(vid, distance=JOIN_DISTANCE)
+    for i in range(n):
+        vid = "v.%d" % i
+        plexe.set_platoon_formation(vid, members)
+    plexe.set_platoon_formation(JOINER, [JOINER])
     return topology
 
 
@@ -193,6 +198,11 @@ def main(demo_mode, real_engine, setter=None):
             if get_distance(plexe, BEHIND_JOIN, FRONT_JOIN) > \
                     2 * JOIN_DISTANCE + 2:
                 state = COMPLETED
+                members = ["v.%d" % i for i in range(JOIN_POSITION)]
+                members.append(JOINER)
+                members.extend(["v.%d" % i for i in range(JOIN_POSITION, N_VEHICLES)])
+                for v in members:
+                    plexe.set_platoon_formation(v, members)
                 plexe.set_fixed_lane(JOINER, 0, safe=False)
                 plexe.set_active_controller(JOINER, CACC)
                 plexe.set_path_cacc_parameters(JOINER, distance=DISTANCE)
